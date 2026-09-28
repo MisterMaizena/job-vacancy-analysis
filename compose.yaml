@@ -1,0 +1,10 @@
+services:
+  dev:
+    image: mcr.microsoft.com/devcontainers/java:1-21-bookworm
+    user: "${DEV_UID:-1000}:${DEV_GID:-1000}"
+    working_dir: /workspace
+    environment:
+      HOME: /tmp
+      GRADLE_USER_HOME: /workspace/.gradle-user-home
+    volumes:
+      - .:/workspace

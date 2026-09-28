@@ -1,0 +1,6 @@
+{
+  "name": "job-vacancy-analysis",
+  "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
+  "workspaceFolder": "/workspaces/job-vacancy-analysis",
+  "remoteUser": "vscode"
+}
