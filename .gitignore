@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
@@ -25,11 +26,16 @@ replay_pid*
 
 # Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
 .kotlin/
+.gradle/
+.gradle-user-home/
+build/
 
 # My files
+.devcontainer/README.md
 01-Context-for-dev-environment.txt
 02-Project-context.txt
 03-Project-implementation-plan.txt
 AGENTS.md
 
-# Testing branch protection
+# IDE related
+.idea/
