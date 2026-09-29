@@ -6,7 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 
-@SpringBootTest
+// TODO: Add a PostgreSQL/Testcontainers integration test for the normal
+// DataSource/Flyway setup.
+@SpringBootTest(
+	properties = [
+		"spring.autoconfigure.exclude=org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+		"spring.flyway.enabled=false",
+	],
+)
 class JobVacancyAnalysisApplicationTests(
 	@Autowired private val context: ApplicationContext,
 ) {

@@ -1,4 +1,19 @@
 services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: job_vacancy_analysis
+      POSTGRES_USER: job_vacancy_analysis
+      # Local development only; override with POSTGRES_PASSWORD if needed.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U job_vacancy_analysis -d job_vacancy_analysis"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   dev:
     image: mcr.microsoft.com/devcontainers/java:1-21-bookworm
     user: "${DEV_UID:-1000}:${DEV_GID:-1000}"
@@ -6,5 +21,9 @@ services:
     environment:
       HOME: /tmp
       GRADLE_USER_HOME: /workspace/.gradle-user-home
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_password}
     volumes:
       - .:/workspace
+
+volumes:
+  postgres_data:
