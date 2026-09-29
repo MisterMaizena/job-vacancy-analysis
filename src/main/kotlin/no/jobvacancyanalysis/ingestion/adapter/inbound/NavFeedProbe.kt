@@ -1,54 +1,30 @@
-package no.jobvacancyanalysis
+package no.jobvacancyanalysis.ingestion.adapter.inbound
 
+import no.jobvacancyanalysis.ingestion.adapter.nav.NavFeedClient
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import org.springframework.web.client.RestClient
 import tools.jackson.databind.ObjectMapper
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 @Component
 @ConditionalOnProperty(prefix = "nav.feed", name = ["probe"], havingValue = "true")
 class NavFeedProbe(
 	private val objectMapper: ObjectMapper,
-	private val navFeedProperties: NavFeedProperties,
+	private val navFeedClient: NavFeedClient,
 ) : ApplicationRunner {
-	private val restClient = RestClient.create("https://pam-stilling-feed.nav.no")
-	private val lookbackDays = navFeedProperties.requireValidLookbackDays()
-	private val token = navFeedProperties.requireApiToken()
-
 	override fun run(args: ApplicationArguments) {
-		val ifModifiedSince = ZonedDateTime.now(ZoneOffset.UTC)
-			.minusDays(lookbackDays)
-			.format(DateTimeFormatter.RFC_1123_DATE_TIME)
-
-		val response = restClient.get()
-			.uri("/api/v1/feed")
-			.accept(MediaType.APPLICATION_JSON)
-			.headers {
-				it.setBearerAuth(token)
-				it.set("If-Modified-Since", ifModifiedSince)
-			}
-			.exchange { _, clientResponse ->
-				val body = clientResponse.body.readBytes().toString(Charsets.UTF_8)
-				Triple(clientResponse.statusCode, clientResponse.headers, body)
-			}
+		val response = navFeedClient.fetch()
 
 		println("Response body:")
-		println(prettyPrint(response.third))
+		println(prettyPrint(response.body))
 		println()
 		println("--- NAV feed response summary ---")
-		println("NAV GET /api/v1/feed -> ${response.first}")
-		println("If-Modified-Since: $ifModifiedSince (${lookbackDays}d lookback)")
-		response.second.eTag?.let { println("ETag: $it") }
-		response.second.lastModified.takeIf { it > 0 }?.let {
-			println("Last-Modified: ${response.second.getFirst("Last-Modified")}")
-		}
-		printSummary(response.third)
+		println("NAV GET /api/v1/feed -> ${response.status}")
+		println("If-Modified-Since: ${response.ifModifiedSince} (${response.lookbackDays}d lookback)")
+		response.eTag?.let { println("ETag: $it") }
+		response.lastModified?.let { println("Last-Modified: $it") }
+		printSummary(response.body)
 	}
 
 	private fun printSummary(body: String) {

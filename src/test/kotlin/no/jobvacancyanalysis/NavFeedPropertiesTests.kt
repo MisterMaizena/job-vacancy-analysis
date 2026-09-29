@@ -1,5 +1,6 @@
 package no.jobvacancyanalysis
 
+import no.jobvacancyanalysis.config.NavFeedProperties
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
