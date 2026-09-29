@@ -36,6 +36,7 @@ build/
 02-Project-context.txt
 03-Project-implementation-plan.txt
 AGENTS.md
+LOCAL-DEV-CHEATSHEET.md
 
 # IDE related
 .idea/
