@@ -12,6 +12,15 @@ permissions:
 
 jobs:
   test:
+    # Temporary compatibility check; remove after GitHub requires run_tests instead.
+    needs: run_tests
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Mirror run_tests result
+        run: test "${{ needs.run_tests.result }}" = "success"
+
+  run_tests:
     if: github.event_name == 'push' || !github.event.pull_request.draft
     runs-on: ubuntu-24.04
     timeout-minutes: 20

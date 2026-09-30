@@ -1,0 +1,490 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "Public feed of job vacancies on Arbeidsplassen.no",
+    "version" : "v1",
+    "description" : "OpenAPI specification for the public feed of job vacancies on Arbeidsplassen.no provided by the Norwegian Labour and Welfare Administration",
+    "termsOfService" : "https://arbeidsplassen.nav.no/vilkar-api",
+    "contact" : {
+      "name" : "Arbeidsplassen.no",
+      "email" : "nav.team.arbeidsplassen@nav.no"
+    },
+    "license" : {
+      "name" : "MIT License",
+      "identifier" : "MIT"
+    }
+  },
+  "servers" : [ {
+    "url" : "https://pam-stilling-feed.nav.no/",
+    "description" : "Arbeidsplassen.no",
+    "variables" : { }
+  } ],
+  "components" : {
+    "securitySchemes" : {
+      "BearerAuth" : {
+        "scheme" : "bearer",
+        "type" : "http"
+      }
+    },
+    "schemas" : {
+      "Feed" : {
+        "type" : "object",
+        "properties" : {
+          "version" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "home_page_url" : {
+            "type" : "string"
+          },
+          "feed_url" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "next_url" : {
+            "type" : [ "string", "null" ]
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "next_id" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FeedLine"
+            }
+          }
+        },
+        "required" : [ "version", "title", "home_page_url", "feed_url", "description", "id", "items" ]
+      },
+      "FeedAd" : {
+        "type" : "object",
+        "properties" : {
+          "uuid" : {
+            "type" : "string"
+          },
+          "published" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "expires" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updated" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "workLocations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FeedLocation"
+            }
+          },
+          "contactList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FeedContact"
+            }
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : [ "string", "null" ]
+          },
+          "sourceurl" : {
+            "type" : [ "string", "null" ]
+          },
+          "source" : {
+            "type" : [ "string", "null" ]
+          },
+          "applicationUrl" : {
+            "type" : [ "string", "null" ]
+          },
+          "applicationDue" : {
+            "type" : [ "string", "null" ]
+          },
+          "occupationCategories" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FeedOccupation"
+            }
+          },
+          "categoryList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FeedCategory"
+            }
+          },
+          "jobtitle" : {
+            "type" : [ "string", "null" ]
+          },
+          "link" : {
+            "type" : "string"
+          },
+          "employer" : {
+            "$ref" : "#/components/schemas/FeedEmployer"
+          },
+          "engagementtype" : {
+            "type" : [ "string", "null" ]
+          },
+          "extent" : {
+            "type" : [ "string", "null" ]
+          },
+          "starttime" : {
+            "type" : [ "string", "null" ]
+          },
+          "positioncount" : {
+            "type" : [ "string", "null" ]
+          },
+          "sector" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "uuid", "published", "expires", "updated", "workLocations", "contactList", "title", "occupationCategories", "categoryList", "link", "employer" ]
+      },
+      "FeedCategory" : {
+        "type" : "object",
+        "properties" : {
+          "categoryType" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : [ "string", "null" ]
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [ "categoryType", "code", "name", "score" ]
+      },
+      "FeedContact" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : [ "string", "null" ]
+          },
+          "email" : {
+            "type" : [ "string", "null" ]
+          },
+          "phone" : {
+            "type" : [ "string", "null" ]
+          },
+          "role" : {
+            "type" : [ "string", "null" ]
+          },
+          "title" : {
+            "type" : [ "string", "null" ]
+          }
+        }
+      },
+      "FeedEmployer" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "orgnr" : {
+            "type" : [ "string", "null" ]
+          },
+          "description" : {
+            "type" : [ "string", "null" ]
+          },
+          "homepage" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "FeedEntry" : {
+        "type" : "object",
+        "properties" : {
+          "uuid" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "businessName" : {
+            "type" : "string"
+          },
+          "municipal" : {
+            "type" : "string"
+          },
+          "sistEndret" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "uuid", "status", "title", "businessName", "municipal", "sistEndret" ]
+      },
+      "FeedEntryContent" : {
+        "type" : "object",
+        "properties" : {
+          "uuid" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "sistEndret" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "ad_content" : {
+            "anyOf" : [ {
+              "$ref" : "#/components/schemas/FeedAd"
+            }, {
+              "type" : "null"
+            } ]
+          }
+        },
+        "required" : [ "uuid", "sistEndret", "status", "ad_content" ]
+      },
+      "FeedLine" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "content_text" : {
+            "type" : "string"
+          },
+          "date_modified" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "_feed_entry" : {
+            "$ref" : "#/components/schemas/FeedEntry"
+          }
+        },
+        "required" : [ "id", "url", "title", "content_text", "_feed_entry" ]
+      },
+      "FeedLocation" : {
+        "type" : "object",
+        "properties" : {
+          "country" : {
+            "type" : [ "string", "null" ]
+          },
+          "address" : {
+            "type" : [ "string", "null" ]
+          },
+          "city" : {
+            "type" : [ "string", "null" ]
+          },
+          "postalCode" : {
+            "type" : [ "string", "null" ]
+          },
+          "county" : {
+            "type" : [ "string", "null" ]
+          },
+          "municipal" : {
+            "type" : [ "string", "null" ]
+          }
+        }
+      },
+      "FeedOccupation" : {
+        "type" : "object",
+        "properties" : {
+          "level1" : {
+            "type" : "string"
+          },
+          "level2" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "level1", "level2" ]
+      }
+    }
+  },
+  "paths" : {
+    "/api/v1/feed" : {
+      "get" : {
+        "tags" : [ "Feed" ],
+        "description" : "Returns first page of the feed by default, or last if query param 'last' is provided",
+        "operationId" : "feed",
+        "parameters" : [ {
+          "name" : "If-None-Match",
+          "in" : "header",
+          "description" : "Entity tag - Specific version of a resource. Provided by response header ETag",
+          "allowEmptyValue" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "If-Modified-Since",
+          "in" : "header",
+          "description" : "Last-modified datetime in RFC 1123 format. Provided by response header Last-Modified",
+          "allowEmptyValue" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Thu, 31 Dec 1992 11:56:00 +0200"
+        }, {
+          "name" : "last",
+          "in" : "query",
+          "description" : "Flag for requesting the last (newest) page of the feed",
+          "allowEmptyValue" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Feed page",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Feed"
+                }
+              }
+            },
+            "headers" : {
+              "ETag" : {
+                "description" : "Entity tag providing a ID for the resource version.",
+                "type" : "UUID"
+              },
+              "Last-Modified" : {
+                "description" : "Last modified datetime of resource.",
+                "type" : "RFC 1123 formatted datetime"
+              }
+            }
+          },
+          "304" : {
+            "description" : "Feed page is empty, or its contents have not changed since last time"
+          },
+          "400" : {
+            "description" : "Invalid input in the request"
+          },
+          "404" : {
+            "description" : "Could not find page"
+          }
+        },
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/api/v1/feed/{feedPageId}" : {
+      "get" : {
+        "tags" : [ "Feed" ],
+        "description" : "Returns the specified feed page, or 304 response if the page has not changed since last time (based on If-None-Match and If-Modified-Since headers)",
+        "operationId" : "feed/{feedPageId}",
+        "parameters" : [ {
+          "name" : "If-None-Match",
+          "in" : "header",
+          "description" : "Entity tag. Specific version of a resource. Provided by response header ETag",
+          "allowEmptyValue" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "If-Modified-Since",
+          "in" : "header",
+          "description" : "Last-modified datetime in RFC 1123 format. Provided by response header Last-Modified",
+          "allowEmptyValue" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Thu, 31 Dec 1992 11:56:00 +0200"
+        }, {
+          "name" : "feedPageId",
+          "in" : "path",
+          "description" : "A unique ID for the feed page",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The specified feed page",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Feed"
+                }
+              }
+            }
+          },
+          "304" : {
+            "description" : "Feed page is empty, or its contents have not changed since last time"
+          },
+          "400" : {
+            "description" : "Invalid input in the request"
+          },
+          "404" : {
+            "description" : "Could not find page"
+          }
+        },
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/api/v1/feedentry/{entryId}" : {
+      "get" : {
+        "tags" : [ "Feed" ],
+        "description" : "Returns details for the specified feed entry",
+        "operationId" : "feedentry/{entryId}",
+        "parameters" : [ {
+          "name" : "entryId",
+          "in" : "path",
+          "description" : "A unique ID for the feed entry",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The specified feed entry",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FeedEntryContent"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Could not find feed entry"
+          }
+        },
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ]
+      }
+    }
+  }
+}
