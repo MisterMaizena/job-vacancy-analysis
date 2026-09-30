@@ -37,7 +37,6 @@ build/
 03-Project-implementation-plan.txt
 get_endpoint_refinement.MD
 AGENTS.md
-LOCAL-DEV-CHEATSHEET.md
 
 # IDE related
 .idea/
