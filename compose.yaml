@@ -2,14 +2,14 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_DB: job_vacancy_analysis
-      POSTGRES_USER: job_vacancy_analysis
+      POSTGRES_DB: job_vacancy_data
+      POSTGRES_USER: job_vacancy_data
       # Local development only; override with POSTGRES_PASSWORD if needed.
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U job_vacancy_analysis -d job_vacancy_analysis"]
+      test: ["CMD-SHELL", "pg_isready -U job_vacancy_data -d job_vacancy_data"]
       interval: 5s
       timeout: 5s
       retries: 10
