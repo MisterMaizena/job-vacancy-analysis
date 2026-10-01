@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationContext
 	properties = [
 		"spring.autoconfigure.exclude=org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
 		"spring.flyway.enabled=false",
+		"nav.feed.base-url=https://example.test",
+		"nav.feed.token=synthetic-token",
 	],
 )
 class JobVacancyAnalysisApplicationTests(

@@ -1,4 +1,4 @@
-package no.jobvacancyanalysis.ingestion.adapter.nav
+package no.jobvacancyanalysis.ingestion.client.nav
 
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
