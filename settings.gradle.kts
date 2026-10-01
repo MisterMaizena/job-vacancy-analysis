@@ -1,1 +1,1 @@
-rootProject.name = "job-vacancy-analysis"
+rootProject.name = "job-vacancy-data"
