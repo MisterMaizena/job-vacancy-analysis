@@ -53,19 +53,12 @@ class NavFeedRestClient(
 	}
 
 	private fun initialFeedUrl(): String =
-		validateFeedUrl(baseUri.resolve("/api/v1/feed").toString())
+		validateFeedUrl(baseUri.resolve(NavFeedPaths.FEED_PATH).toString())
 
 	private fun validateFeedUrl(url: String): String {
 		val uri = URI.create(url)
-		require(uri.scheme == baseUri.scheme && uri.host == baseUri.host && uri.port == baseUri.port) {
-			"NAV feed URL must target the configured origin, got: $url"
-		}
-		require(uri.fragment == null) {
-			"NAV feed URL must not contain a fragment, got: $url"
-		}
-		require(uri.path?.startsWith("/api/v1/feed") == true) {
-			"NAV feed URL path must start with /api/v1/feed, got: $url"
-		}
+		requireSameOrigin(uri, url)
+		requireValidFeedUri(uri, url, "NAV feed")
 		return uri.normalize().toString()
 	}
 
@@ -74,14 +67,25 @@ class NavFeedRestClient(
 		require(nextUri.scheme == null && nextUri.host == null) {
 			"NAV continuation URL must be relative, got: $nextUrl"
 		}
-		require(nextUri.fragment == null) {
-			"NAV continuation URL must not contain a fragment, got: $nextUrl"
-		}
-		require(nextUri.path?.startsWith("/api/v1/feed") == true) {
-			"NAV continuation URL path must start with /api/v1/feed, got: $nextUrl"
-		}
+		requireValidFeedUri(nextUri, nextUrl, "NAV continuation")
 		val resolved = baseUri.resolve(nextUri).normalize()
-		return validateFeedUrl(resolved.toString())
+		requireSameOrigin(resolved, resolved.toString())
+		return resolved.toString()
+	}
+
+	private fun requireSameOrigin(uri: URI, url: String) {
+		require(uri.scheme == baseUri.scheme && uri.host == baseUri.host && uri.port == baseUri.port) {
+			"NAV feed URL must target the configured origin, got: $url"
+		}
+	}
+
+	private fun requireValidFeedUri(uri: URI, url: String, context: String) {
+		require(uri.fragment == null) {
+			"$context URL must not contain a fragment, got: $url"
+		}
+		require(uri.path?.startsWith(NavFeedPaths.FEED_PATH) == true) {
+			"$context URL path must start with ${NavFeedPaths.FEED_PATH}, got: $url"
+		}
 	}
 
 	private fun parseBaseUrl(baseUrl: String): URI {

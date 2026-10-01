@@ -23,17 +23,16 @@ class NavFeedRestClientTests {
 	fun `fetches first page and returns next cursor`() {
 		val builder = RestClient.builder()
 		val server = MockRestServiceServer.bindTo(builder).build()
-		val client = NavFeedRestClient(builder.build(), pageMapper, "https://pam-stilling-feed.test")
+		val client = NavFeedRestClient(builder.build(), pageMapper, TEST_BASE_URL)
 
-		server.expect(requestTo("https://pam-stilling-feed.test/api/v1/feed"))
-			.andRespond(withSuccess(feedPageJson(nextUrl = "/api/v1/feed?next=synthetic-next"), MediaType.APPLICATION_JSON))
+		server.expect(requestTo(FEED_URL))
+			.andRespond(withSuccess(feedPageJson(nextUrl = NEXT_CURSOR_URL), MediaType.APPLICATION_JSON))
 
 		val result = client.fetchPage(null) as FeedFetchResult.Page
 
 		assertThat(result.page.items).hasSize(1)
-		assertThat(result.cursor.url).isEqualTo("https://pam-stilling-feed.test/api/v1/feed")
-		assertThat(result.nextCursor?.url)
-			.isEqualTo("https://pam-stilling-feed.test/api/v1/feed?next=synthetic-next")
+		assertThat(result.cursor.url).isEqualTo(FEED_URL)
+		assertThat(result.nextCursor?.url).isEqualTo("$FEED_URL?next=synthetic-next")
 		server.verify()
 	}
 
@@ -41,9 +40,9 @@ class NavFeedRestClientTests {
 	fun `follows continuation cursor and detects tail`() {
 		val builder = RestClient.builder()
 		val server = MockRestServiceServer.bindTo(builder).build()
-		val client = NavFeedRestClient(builder.build(), pageMapper, "https://pam-stilling-feed.test")
+		val client = NavFeedRestClient(builder.build(), pageMapper, TEST_BASE_URL)
 
-		val cursor = FeedPageCursor("https://pam-stilling-feed.test/api/v1/feed?next=synthetic-next")
+		val cursor = FeedPageCursor("$FEED_URL?next=synthetic-next")
 		server.expect(requestTo(cursor.url))
 			.andRespond(withSuccess(feedPageJson(nextUrl = null), MediaType.APPLICATION_JSON))
 
@@ -58,10 +57,10 @@ class NavFeedRestClientTests {
 	fun `returns unchanged when server responds 304`() {
 		val builder = RestClient.builder()
 		val server = MockRestServiceServer.bindTo(builder).build()
-		val client = NavFeedRestClient(builder.build(), pageMapper, "https://pam-stilling-feed.test")
+		val client = NavFeedRestClient(builder.build(), pageMapper, TEST_BASE_URL)
 
 		val cursor = FeedPageCursor(
-			url = "https://pam-stilling-feed.test/api/v1/feed?next=synthetic-next",
+			url = "$FEED_URL?next=synthetic-next",
 			etag = "\"abc123\"",
 			lastModified = "Wed, 01 Oct 2026 12:00:00 GMT",
 		)
@@ -78,10 +77,10 @@ class NavFeedRestClientTests {
 
 	@Test
 	fun `rejects cross-origin continuation url`() {
-		val client = NavFeedRestClient(RestClient.builder().build(), pageMapper, "https://pam-stilling-feed.test")
+		val client = NavFeedRestClient(RestClient.builder().build(), pageMapper, TEST_BASE_URL)
 
 		val exception = assertThrows<IllegalArgumentException> {
-			client.fetchPage(FeedPageCursor("https://evil.test/api/v1/feed?next=x"))
+			client.fetchPage(FeedPageCursor("https://evil.test${NavFeedPaths.FEED_PATH}?next=x"))
 		}
 
 		assertThat(exception.message).contains("origin")
@@ -89,13 +88,13 @@ class NavFeedRestClientTests {
 
 	@Test
 	fun `rejects continuation url outside feed path`() {
-		val client = NavFeedRestClient(RestClient.builder().build(), pageMapper, "https://pam-stilling-feed.test")
+		val client = NavFeedRestClient(RestClient.builder().build(), pageMapper, TEST_BASE_URL)
 
 		val exception = assertThrows<IllegalArgumentException> {
-			client.fetchPage(FeedPageCursor("https://pam-stilling-feed.test/api/v1/other?next=x"))
+			client.fetchPage(FeedPageCursor("$TEST_BASE_URL$OUTSIDE_FEED_PATH?next=x"))
 		}
 
-		assertThat(exception.message).contains("/api/v1/feed")
+		assertThat(exception.message).contains(NavFeedPaths.FEED_PATH)
 	}
 
 	private fun feedPageJson(nextUrl: String?): String {
@@ -128,5 +127,12 @@ class NavFeedRestClientTests {
 		  $nextField
 		}
 		""".trimIndent()
+	}
+
+	private companion object {
+		const val TEST_BASE_URL = "https://pam-stilling-feed.test"
+		const val FEED_URL = "$TEST_BASE_URL${NavFeedPaths.FEED_PATH}"
+		const val NEXT_CURSOR_URL = "${NavFeedPaths.FEED_PATH}?next=synthetic-next"
+		const val OUTSIDE_FEED_PATH = "/api/v1/other"
 	}
 }
