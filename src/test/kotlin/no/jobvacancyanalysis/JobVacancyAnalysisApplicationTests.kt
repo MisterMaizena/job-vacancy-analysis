@@ -3,6 +3,7 @@ package no.jobvacancyanalysis
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.getBean
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
 
@@ -22,7 +23,7 @@ class JobVacancyAnalysisApplicationTests(
 
 	@Test
 	fun contextLoads() {
-		assertThat(context.getBean(JobVacancyAnalysisApplication::class.java)).isNotNull()
+		assertThat(context.getBean<JobVacancyAnalysisApplication>()).isNotNull()
 	}
 
 }

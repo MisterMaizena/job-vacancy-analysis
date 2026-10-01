@@ -6,6 +6,7 @@ import no.jobvacancyanalysis.ingestion.application.FeedPageCursor
 import no.jobvacancyanalysis.ingestion.client.NavFeedClient
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.toEntity
 
 class NavFeedRestClient(
 	private val restClient: RestClient,
@@ -26,7 +27,7 @@ class NavFeedRestClient(
 			.onStatus({ it.isError }) { _, clientResponse ->
 				throw NavFeedException("NAV feed request failed with status ${clientResponse.statusCode}")
 			}
-			.toEntity(String::class.java)
+			.toEntity<String>()
 
 		return when {
 			response.statusCode.isSameCodeAs(HttpStatus.NOT_MODIFIED) -> FeedFetchResult.Unchanged
