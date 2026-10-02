@@ -22,7 +22,7 @@ services:
       HOME: /tmp
       GRADLE_USER_HOME: /workspace/.gradle-user-home
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_password}
-      NAV_FEED_API_TOKEN: ${NAV_API_TOKEN:-}
+      NAV_FEED_TOKEN: ${NAV_FEED_TOKEN:-}
     volumes:
       - .:/workspace
 
