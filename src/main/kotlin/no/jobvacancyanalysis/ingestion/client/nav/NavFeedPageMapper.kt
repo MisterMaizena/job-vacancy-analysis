@@ -3,9 +3,9 @@ package no.jobvacancyanalysis.ingestion.client.nav
 import java.time.OffsetDateTime
 import java.time.format.DateTimeParseException
 import java.util.UUID
-import no.jobvacancyanalysis.ingestion.application.FeedEntry
-import no.jobvacancyanalysis.ingestion.application.FeedItem
-import no.jobvacancyanalysis.ingestion.application.FeedPage
+import no.jobvacancyanalysis.ingestion.application.nav.FeedEntry
+import no.jobvacancyanalysis.ingestion.application.nav.FeedItem
+import no.jobvacancyanalysis.ingestion.application.nav.FeedPage
 import org.springframework.stereotype.Component
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper

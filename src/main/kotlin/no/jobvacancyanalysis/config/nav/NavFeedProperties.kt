@@ -1,4 +1,4 @@
-package no.jobvacancyanalysis.config
+package no.jobvacancyanalysis.config.nav
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

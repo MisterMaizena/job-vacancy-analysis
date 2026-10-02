@@ -1,4 +1,4 @@
-package no.jobvacancyanalysis.ingestion.application
+package no.jobvacancyanalysis.ingestion.application.nav
 
 import java.time.OffsetDateTime
 
