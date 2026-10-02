@@ -1,9 +1,8 @@
 package no.jobvacancyanalysis.ingestion.client.nav
 
 import java.net.URI
-import no.jobvacancyanalysis.ingestion.application.FeedFetchResult
-import no.jobvacancyanalysis.ingestion.application.FeedPageCursor
-import no.jobvacancyanalysis.ingestion.client.NavFeedClient
+import no.jobvacancyanalysis.ingestion.application.nav.FeedFetchResult
+import no.jobvacancyanalysis.ingestion.application.nav.FeedPageCursor
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.toEntity

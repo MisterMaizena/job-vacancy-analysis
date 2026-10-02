@@ -1,6 +1,6 @@
-package no.jobvacancyanalysis.config
+package no.jobvacancyanalysis.config.nav
 
-import no.jobvacancyanalysis.ingestion.client.NavFeedClient
+import no.jobvacancyanalysis.ingestion.client.nav.NavFeedClient
 import no.jobvacancyanalysis.ingestion.client.nav.NavFeedPageMapper
 import no.jobvacancyanalysis.ingestion.client.nav.NavFeedRestClient
 import org.springframework.boot.context.properties.EnableConfigurationProperties

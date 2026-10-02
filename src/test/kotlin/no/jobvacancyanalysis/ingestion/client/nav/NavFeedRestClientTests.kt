@@ -1,7 +1,7 @@
 package no.jobvacancyanalysis.ingestion.client.nav
 
-import no.jobvacancyanalysis.ingestion.application.FeedFetchResult
-import no.jobvacancyanalysis.ingestion.application.FeedPageCursor
+import no.jobvacancyanalysis.ingestion.application.nav.FeedFetchResult
+import no.jobvacancyanalysis.ingestion.application.nav.FeedPageCursor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

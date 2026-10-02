@@ -1,4 +1,4 @@
-package no.jobvacancyanalysis.ingestion.application
+package no.jobvacancyanalysis.ingestion.application.nav
 
 sealed interface FeedFetchResult {
 	data class Page(

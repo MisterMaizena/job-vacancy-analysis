@@ -1,4 +1,4 @@
-package no.jobvacancyanalysis.ingestion.application
+package no.jobvacancyanalysis.ingestion.application.nav
 
 data class FeedPageCursor(
 	val url: String,
